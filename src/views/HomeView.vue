@@ -1,9 +1,9 @@
 <script setup>
-import TheWelcome from '@/components/TheWelcome.vue'
+import TodoItem from "../components/TodoItem.vue";
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <TodoItem />
   </main>
 </template>
