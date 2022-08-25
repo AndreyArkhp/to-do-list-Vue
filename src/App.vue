@@ -1,15 +1,9 @@
 <script setup>
-import {RouterLink, RouterView} from "vue-router";
+import TodosList from "./components/TodosList.vue";
 </script>
 
 <template>
-  <div class="wrapper">
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/addToDo">AddToDo</RouterLink>
-    </nav>
-  </div>
-  <RouterView />
+  <TodosList />
 </template>
 
 <style scoped></style>

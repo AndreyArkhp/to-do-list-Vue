@@ -1,18 +1,16 @@
 <script setup>
 import {ref} from "vue";
-const checkboxHidden = ref("checkHidden");
-const checkboxVisible = ref("checkVisible");
-const todo = ref("todo");
-const data = ref("data");
+defineProps(["todo", "todoHeader"]);
 </script>
 
 <template>
-  <li>
-    <input type="checkbox" :class="checkboxHidden" />
-    <div :class="checkboxVisible"></div>
-    <p :class="todo">text todo</p>
-    <p>status</p>
-    <p :class="data">date</p>
+  <li v-if="todoHeader"></li>
+  <li v-else>
+    <input type="checkbox" class="checkbox" />
+    <div class="checkVisible"></div>
+    <p class="todo">{{ todo.description }}</p>
+    <p>{{ todo.done ? "Выполнено" : "В работе" }}</p>
+    <p class="data">{{ new Date(todo.id).getFullYear() }}</p>
   </li>
 </template>
 
@@ -28,7 +26,7 @@ li {
   border-bottom: 1px solid #eeebe9;
 }
 
-.checkHidden {
+. .checkbox {
   width: 25px;
   height: 25px;
   opacity: 0;
