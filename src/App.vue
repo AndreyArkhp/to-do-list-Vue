@@ -26,6 +26,7 @@ function closeModal() {
   modalActive.value = false;
 }
 provide("modalActive", {modalActive, closeModal});
+provide("toggleCompleted", toggleCompleted);
 </script>
 
 <template>
@@ -42,7 +43,7 @@ provide("modalActive", {modalActive, closeModal});
       </div>
     </header>
     <main>
-      <TodosList :todos="todos" @completed="toggleCompleted" />
+      <TodosList :todos="todos" />
     </main>
     <Teleport to="#modal">
       <Modal><h2>test</h2></Modal>

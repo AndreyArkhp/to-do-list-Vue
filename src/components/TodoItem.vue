@@ -1,12 +1,14 @@
 <script setup>
-import {ref} from "vue";
-defineProps(["todo"]);
-function getTodoDate(timeStamp) {
-  const date = new Date(timeStamp);
+import {ref, computed, inject} from "vue";
+const props = defineProps(["todo"]);
+const date = computed(() => {
+  const date = new Date(props.todo.id);
   const day = date.getDate();
   const month = date.getMonth();
   return `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month}.${date.getFullYear()}`;
-}
+});
+const checked = computed(() => (props.todo.done ? true : false));
+const toggleCompleted = inject("toggleCompleted");
 </script>
 
 <template>
@@ -15,13 +17,18 @@ function getTodoDate(timeStamp) {
       class="todoItem__checkboxVisible"
       :class="{todoItem__checkboxVisible_checked: todo.done}"
     >
-      <input type="checkbox" class="todoItem__checkboxHidden" @change="$emit('completed', todo)" />
+      <input
+        :checked="checked"
+        type="checkbox"
+        class="todoItem__checkboxHidden"
+        @change="() => toggleCompleted(todo)"
+      />
     </label>
     <p class="todoItem__description">{{ todo.description }}</p>
     <p class="todoItem__status" :class="{todoItem__status_done: todo.done}">
       {{ todo.done ? "Выполнено" : "В работе" }}
     </p>
-    <p class="todoItem__date">{{ getTodoDate(todo.id) }}</p>
+    <p class="todoItem__date">{{ date }}</p>
   </li>
 </template>
 
@@ -35,7 +42,7 @@ function getTodoDate(timeStamp) {
   border-bottom: 1px solid #eeebe9;
 }
 
-.todoItem_completed {
+.todoItem:hover {
   background: #f6f9ff;
 }
 

@@ -2,8 +2,6 @@
 import {ref} from "vue";
 import TodoItem from "./TodoItem.vue";
 defineProps(["todos"]);
-
-defineEmits(["completed"]);
 </script>
 
 <template>
@@ -13,12 +11,7 @@ defineEmits(["completed"]);
       <p class="todoHeader__item todoHeader__item_type_status">Статус</p>
       <p class="todoHeader__item todoHeader__item_type_date">Дата</p>
     </li>
-    <TodoItem
-      :key="todo.id"
-      v-for="todo in todos"
-      :todo="todo"
-      @completed="$emit('completed', $event)"
-    />
+    <TodoItem :key="todo.id" v-for="todo in todos" :todo="todo" />
   </ul>
 </template>
 
