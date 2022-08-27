@@ -1,0 +1,6 @@
+@font-face {
+  font-family: "VS";
+  font-style: normal;
+  font-weight: 400;
+  src: url(./VelaSans-Regular.woff2) format("woff2"), url(./VelaSans-Regular.woff) format("woff");
+}
