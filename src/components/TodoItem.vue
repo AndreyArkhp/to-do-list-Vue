@@ -46,7 +46,7 @@ function getTodoDate(timeStamp) {
   position: absolute;
   top: -15px;
   left: -15px;
-  z-index: 5;
+  z-index: 2;
   cursor: pointer;
 }
 

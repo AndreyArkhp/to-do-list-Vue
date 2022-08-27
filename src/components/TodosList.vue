@@ -24,7 +24,6 @@ defineEmits(["completed"]);
 
 <style scoped>
 .todoList {
-  max-width: 1300px;
   font: 400 normal 14px/18.48px "VS", Arial, sans-serif;
 }
 .todoHeader {
