@@ -1,8 +1,13 @@
 <script setup>
-import {inject, ref} from "vue";
+import {inject, ref, watch} from "vue";
 const todoText = ref("");
 const addTodo = inject("addTodo");
 const {closeModal} = inject("modalActive");
+
+const vFocus = {
+  mounted: (el) => el.focus(),
+};
+
 function handleSubmit() {
   addTodo(todoText.value);
   closeModal();
@@ -15,6 +20,7 @@ function handleSubmit() {
     <h2 class="form__title">Создать новую задачу</h2>
     <label class="form__subtitle" for="description">Описание</label>
     <input
+      v-focus
       type="text"
       placeholder="Введите описание"
       id="description"

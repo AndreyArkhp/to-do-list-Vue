@@ -1,5 +1,5 @@
 <script setup>
-import {inject, onMounted, onUnmounted, onUpdated} from "vue";
+import {inject,onUpdated} from "vue";
 const {modalActive, closeModal, escCloseModal} = inject("modalActive");
 onUpdated(() => {
   if (modalActive.value) {

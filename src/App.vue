@@ -1,15 +1,19 @@
 <script setup>
 import {ref, computed, watchEffect, provide} from "vue";
 import TodosList from "./components/TodosList.vue";
-import {STORAGE_KEY, FORM_ADD_TODO_INPUT} from "./utils/constants";
+import {STORAGE_KEY} from "./utils/constants";
 import Modal from "./components/Modal.vue";
 import FormAddTodo from "./components/FormAddTodo.vue";
 import SelectSorting from "./components/SelectSorting.vue";
 import SearchTodo from "./components/SearchTodo.vue";
 import {search} from "./utils/function";
+
 const todos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
+
 const selectValue = ref("date");
 const searchValue = ref("");
+const modalActive = ref(false);
+
 watchEffect(() => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(todos.value));
 });
@@ -27,7 +31,7 @@ watchEffect(() => {
     });
   }
 });
-const modalActive = ref(false);
+
 const filteredTodos = computed(() => search(todos, searchValue));
 
 function toggleCompleted(todo) {

@@ -1,10 +1,12 @@
 <script setup>
-import {ref, computed, inject} from "vue";
+import {computed, inject} from "vue";
 import {getDateFromTimestamp} from "../utils/function";
+
 const props = defineProps(["todo"]);
+const toggleCompleted = inject("toggleCompleted");
+
 const date = computed(() => getDateFromTimestamp(props.todo.id));
 const checked = computed(() => (props.todo.done ? true : false));
-const toggleCompleted = inject("toggleCompleted");
 </script>
 
 <template>
