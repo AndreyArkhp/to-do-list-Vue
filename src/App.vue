@@ -1,85 +1,104 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import {ref, computed, watchEffect, provide} from "vue";
+import TodosList from "./components/TodosList.vue";
+import {STORAGE_KEY, FORM_ADD_TODO_INPUT} from "./utils/constants";
+import Modal from "./components/Modal.vue";
+import FormAddTodo from "./components/FormAddTodo.vue";
+import SelectSorting from "./components/SelectSorting.vue";
+import SearchTodo from "./components/SearchTodo.vue";
+import {search} from "./utils/function";
+const todos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
+const selectValue = ref("date");
+const searchValue = ref("");
+watchEffect(() => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos.value));
+});
+watchEffect(() => {
+  if (selectValue.value === "date") {
+    todos.value.sort((a, b) => a.id - b.id);
+  }
+  if (selectValue.value === "status") {
+    todos.value.sort((a) => {
+      if (a.done) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+  }
+});
+const modalActive = ref(false);
+const filteredTodos = computed(() => search(todos, searchValue));
+
+function toggleCompleted(todo) {
+  todo.done = !todo.done;
+}
+
+function closeModal() {
+  modalActive.value = false;
+}
+function escCloseModal(e) {
+  if (modalActive.value && e.key === "Escape") {
+    closeModal();
+  }
+}
+
+function addTodo(text) {
+  if (text) {
+    todos.value.push({id: Date.now(), description: text, done: false});
+  }
+}
+provide("modalActive", {modalActive, closeModal, escCloseModal});
+provide("toggleCompleted", toggleCompleted);
+provide("addTodo", addTodo);
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <section class="todoApp">
+    <header class="header">
+      <h1 class="todoTitle">To do list</h1>
+      <button class="addTodo" @click="modalActive = true"></button>
+      <SearchTodo v-model="searchValue" />
+      <SelectSorting v-model="selectValue" />
+    </header>
+    <main>
+      <TodosList :todos="filteredTodos" />
+    </main>
+    <Teleport to="#modal">
+      <Modal><FormAddTodo /></Modal>
+    </Teleport>
+  </section>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.todoApp {
+  max-width: 1300px;
+  min-width: 800px;
+  margin: 0 auto;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.todoTitle {
+  font: 700 normal 24px/132% "Montserrat", Arial, sans-serif;
+  padding-block-start: 5px;
 }
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.header {
+  padding: 108px 0 28px 40px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  row-gap: 28px;
 }
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.addTodo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  position: relative;
+  justify-self: end;
+  background: url(./images/plus.svg) center no-repeat, #d6dbeb;
+  transition: opacity linear 0.1s;
+  cursor: pointer;
 }
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.addTodo:hover {
+  opacity: 0.8;
 }
 </style>
