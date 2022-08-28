@@ -1,0 +1,20 @@
+@font-face {
+  font-family: "VS";
+  font-style: normal;
+  font-weight: 400;
+  src: url(./VelaSans/VelaSans-Regular.woff2) format("woff2"), url(./VelaSans/VelaSans-Regular.woff) format("woff");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  src: url(./Montserrat/Montserrat-Bold.woff2) format("woff2"),url(./Montserrat/Montserrat-Bold.woff) format("woff");
+}
+
+@font-face {
+  font-family: "AGA";
+  font-style: normal;
+  font-weight: 400;
+  src: url(./AGAvantGardeCyr/agavantgardecyr-book.woff2) format("woff2"),url(./AGAvantGardeCyr/agavantgardecyr-book.woff) format("woff");
+}
