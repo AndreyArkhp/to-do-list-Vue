@@ -1,8 +1,27 @@
+<script setup>
+import {inject, ref} from "vue";
+const todoText = ref("");
+const addTodo = inject("addTodo");
+const {closeModal} = inject("modalActive");
+function handleSubmit() {
+  addTodo(todoText.value);
+  closeModal();
+  todoText.value = "";
+}
+</script>
+
 <template>
-  <form @submit.prevent="" class="form">
+  <form @submit.prevent="handleSubmit" class="form">
     <h2 class="form__title">Создать новую задачу</h2>
     <label class="form__subtitle" for="description">Описание</label>
-    <input type="text" placeholder="Введите описание" id="description" class="form__description" />
+    <input
+      type="text"
+      placeholder="Введите описание"
+      id="description"
+      class="form__description"
+      v-model="todoText"
+      name="description"
+    />
     <button class="form__submit">Создать</button>
   </form>
 </template>
@@ -25,7 +44,7 @@
   border: 1px solid #dde2e4;
   border-radius: 8px;
   margin-bottom: 30px;
-  padding: 11px 180px 11px 16px;
+  padding: 11px 0 11px 16px;
   font: 400 normal 14px/132% "VS", Arial, sans-serif;
 }
 

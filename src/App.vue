@@ -1,24 +1,13 @@
 <script setup>
 import {ref, computed, watchEffect, provide} from "vue";
 import TodosList from "./components/TodosList.vue";
-import {STORAGE_KEY} from "./utils/constants";
+import {STORAGE_KEY, FORM_ADD_TODO_INPUT} from "./utils/constants";
 import Modal from "./components/Modal.vue";
 import FormAddTodo from "./components/FormAddTodo.vue";
-const todosTest = ref([
-  {id: Date.now(), description: "Размещение новостей на сайте", done: true},
-  {id: Date.now(), description: "Внедрить Wi-fi для читателей", done: false},
-  {id: Date.now(), description: "Отредактировать раздел “Доступная среда”", done: true},
-  {id: Date.now(), description: "Презентация “Информационные технологии”", done: false},
-  {id: Date.now(), description: "Счётчики — внедрить дизайн", done: false},
-  {id: Date.now(), description: "Сверстать новый layout", done: false},
-  {
-    id: Date.now(),
-    description:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia consequuntur esse modi dolorem nam est tenetur a earum reiciendis consectetur?",
-    done: false,
-  },
-]);
-const todos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY)) || todosTest);
+const todos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
+watchEffect(() => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos.value));
+});
 const modalActive = ref(false);
 function toggleCompleted(todo) {
   todo.done = !todo.done;
@@ -31,8 +20,16 @@ function escCloseModal(e) {
     closeModal();
   }
 }
+
+function addTodo(text) {
+  console.log(text);
+  if (text) {
+    todos.value.push({id: Date.now(), description: text, done: false});
+  }
+}
 provide("modalActive", {modalActive, closeModal, escCloseModal});
 provide("toggleCompleted", toggleCompleted);
+provide("addTodo", addTodo);
 </script>
 
 <template>
