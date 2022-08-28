@@ -1,12 +1,20 @@
 <script setup>
-import {inject} from "vue";
-const {modalActive, closeModal} = inject("modalActive");
+import {inject, onMounted, onUnmounted, onUpdated} from "vue";
+const {modalActive, closeModal, escCloseModal} = inject("modalActive");
+onUpdated(() => {
+  if (modalActive.value) {
+    document.addEventListener("keydown", escCloseModal);
+  } else {
+    document.removeEventListener("keydown", escCloseModal);
+  }
+});
 </script>
 
 <template>
   <div v-if="modalActive" @click.self="closeModal" class="modal">
     <div class="modal__container">
-      <span class="modal__closeBtn" @click.self="closeModal"></span>
+      <button class="modal__closeBtn" @click.self="closeModal" type="button"></button>
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -31,10 +39,13 @@ const {modalActive, closeModal} = inject("modalActive");
   box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
   border-radius: 6px;
   position: relative;
+  padding: 40px 40px 50px;
 }
 .modal__closeBtn {
   width: 22px;
   height: 22px;
+  border: none;
+  padding: 0;
   display: inline-block;
   background: url(../images/closeBtn.svg);
   position: absolute;
@@ -43,5 +54,9 @@ const {modalActive, closeModal} = inject("modalActive");
   margin-inline-end: 40px;
   margin-block-start: 40px;
   cursor: pointer;
+  transition: opacity linear 0.1s;
+}
+.modal__closeBtn:hover {
+  opacity: 0.8;
 }
 </style>

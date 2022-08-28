@@ -3,6 +3,7 @@ import {ref, computed, watchEffect, provide} from "vue";
 import TodosList from "./components/TodosList.vue";
 import {STORAGE_KEY} from "./utils/constants";
 import Modal from "./components/Modal.vue";
+import FormAddTodo from "./components/FormAddTodo.vue";
 const todosTest = ref([
   {id: Date.now(), description: "Размещение новостей на сайте", done: true},
   {id: Date.now(), description: "Внедрить Wi-fi для читателей", done: false},
@@ -25,7 +26,12 @@ function toggleCompleted(todo) {
 function closeModal() {
   modalActive.value = false;
 }
-provide("modalActive", {modalActive, closeModal});
+function escCloseModal(e) {
+  if (modalActive.value && e.key === "Escape") {
+    closeModal();
+  }
+}
+provide("modalActive", {modalActive, closeModal, escCloseModal});
 provide("toggleCompleted", toggleCompleted);
 </script>
 
@@ -36,7 +42,7 @@ provide("toggleCompleted", toggleCompleted);
       <button class="addTodo" @click="modalActive = true"></button>
       <div><input type="text" /></div>
       <div>
-        <select name="" id="">
+        <select class="select">
           <option value="1">Дата</option>
           <option value="2">Статус</option>
         </select>
@@ -46,12 +52,15 @@ provide("toggleCompleted", toggleCompleted);
       <TodosList :todos="todos" />
     </main>
     <Teleport to="#modal">
-      <Modal><h2>test</h2></Modal>
+      <Modal><FormAddTodo /></Modal>
     </Teleport>
   </section>
 </template>
 
 <style scoped>
+.select {
+  width: 50px;
+}
 .todoApp {
   max-width: 1300px;
   min-width: 800px;
@@ -72,13 +81,10 @@ provide("toggleCompleted", toggleCompleted);
   position: relative;
   justify-self: end;
   background: url(./images/plus.svg) center no-repeat, #d6dbeb;
+  transition: opacity linear 0.1s;
+  cursor: pointer;
 }
-.addTodo::before {
-  content: "";
-  width: 20px;
-  height: 5px;
-  background: #314b99;
-  top: 0;
-  left: 0;
+.addTodo:hover {
+  opacity: 0.8;
 }
 </style>
