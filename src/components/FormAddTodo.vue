@@ -19,7 +19,7 @@ function handleSubmit() {
       placeholder="Введите описание"
       id="description"
       class="form__description"
-      v-model="todoText"
+      v-model.trim="todoText"
       name="description"
     />
     <button class="form__submit">Создать</button>

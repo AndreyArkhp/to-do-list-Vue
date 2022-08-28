@@ -40,6 +40,7 @@ onUpdated(() => {
   border-radius: 6px;
   position: relative;
   padding: 40px 40px 50px;
+  background: #fff;
 }
 .modal__closeBtn {
   width: 22px;

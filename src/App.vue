@@ -4,8 +4,12 @@ import TodosList from "./components/TodosList.vue";
 import {STORAGE_KEY, FORM_ADD_TODO_INPUT} from "./utils/constants";
 import Modal from "./components/Modal.vue";
 import FormAddTodo from "./components/FormAddTodo.vue";
+import SelectSorting from "./components/SelectSorting.vue";
+import SearchTodo from "./components/SearchTodo.vue";
+import {search} from "./utils/function";
 const todos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
 const selectValue = ref("date");
+const searchValue = ref("");
 watchEffect(() => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(todos.value));
 });
@@ -24,6 +28,8 @@ watchEffect(() => {
   }
 });
 const modalActive = ref(false);
+const filteredTodos = computed(() => search(todos, searchValue));
+
 function toggleCompleted(todo) {
   todo.done = !todo.done;
 }
@@ -38,7 +44,6 @@ function escCloseModal(e) {
 }
 
 function addTodo(text) {
-  console.log(text);
   if (text) {
     todos.value.push({id: Date.now(), description: text, done: false});
   }
@@ -53,17 +58,11 @@ provide("addTodo", addTodo);
     <header class="header">
       <h1 class="todoTitle">To do list</h1>
       <button class="addTodo" @click="modalActive = true"></button>
-      <div><input type="text" /></div>
-      <label class="label">
-        Сортировать по:
-        <select class="select" v-model="selectValue">
-          <option value="date">Дата</option>
-          <option value="status">Статус</option>
-        </select></label
-      >
+      <SearchTodo v-model="searchValue" />
+      <SelectSorting v-model="selectValue" />
     </header>
     <main>
-      <TodosList :todos="todos" />
+      <TodosList :todos="filteredTodos" />
     </main>
     <Teleport to="#modal">
       <Modal><FormAddTodo /></Modal>
@@ -72,37 +71,21 @@ provide("addTodo", addTodo);
 </template>
 
 <style scoped>
-.label {
-  justify-self: end;
-  font: 400 normal 14px/132% "VS", Arial, sans-serif;
-}
-.select {
-  width: 80px;
-  border: none;
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  background-color: #fff;
-  cursor: pointer;
-  background: url(./images/selectBg.svg) right no-repeat;
-  font: inherit;
-  padding: 0 15px 0 12px;
-}
-.select:focus {
-  outline: none;
-}
 .todoApp {
   max-width: 1300px;
   min-width: 800px;
   margin: 0 auto;
 }
+.todoTitle {
+  font: 700 normal 24px/132% "Montserrat", Arial, sans-serif;
+  padding-block-start: 5px;
+}
 .header {
-  padding: 108px 0 26px 40px;
+  padding: 108px 0 28px 40px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, auto);
-  row-gap: 30px;
-  border: 1px solid rgb(51, 192, 33);
+  row-gap: 28px;
 }
 .addTodo {
   width: 40px;

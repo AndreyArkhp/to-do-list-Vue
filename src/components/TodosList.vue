@@ -25,7 +25,7 @@ defineProps(["todos"]);
 }
 
 .todoHeader__item {
-  border-left: 1px solid grey;
+  border-left: 1px solid #c4c4c4;
   padding: 10px 20px 4px;
   margin-block-end: 16px;
 }

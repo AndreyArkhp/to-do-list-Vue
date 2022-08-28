@@ -1,12 +1,8 @@
 <script setup>
 import {ref, computed, inject} from "vue";
+import {getDateFromTimestamp} from "../utils/function";
 const props = defineProps(["todo"]);
-const date = computed(() => {
-  const date = new Date(props.todo.id);
-  const day = date.getDate();
-  const month = date.getMonth();
-  return `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month}.${date.getFullYear()}`;
-});
+const date = computed(() => getDateFromTimestamp(props.todo.id));
 const checked = computed(() => (props.todo.done ? true : false));
 const toggleCompleted = inject("toggleCompleted");
 </script>
@@ -47,7 +43,9 @@ const toggleCompleted = inject("toggleCompleted");
 }
 
 .todoItem__checkboxHidden {
-  width: 60vw;
+  width: 95vw;
+  max-width: 1250px;
+  min-width: 720px;
   height: 40px;
   opacity: 0;
   position: absolute;
